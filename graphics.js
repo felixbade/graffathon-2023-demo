@@ -1,6 +1,7 @@
 let beat;
 let backgroundColor;
-
+const almostBlack = 'hsl(240, 5%, 5%)';
+const almostWhite = 'hsl(60, 30%, 80%)';
 let scaling;
 let left
 let right
@@ -9,7 +10,7 @@ const zenith = -500;
 const bottom = 500;
 
 function draw() {
-    beat = getBeat();
+    beat = getBeat() + 0;
 
     scaling = height / 1000;
     left = (-width / 2) / scaling;
@@ -18,11 +19,11 @@ function draw() {
     // Resolution independent canvas
     translate(width / 2, height / 2);
     scale(scaling);
-    backgroundColor = color('hsl(60, 30%, 80%)');
+    backgroundColor = almostWhite
     background(backgroundColor);
 
     // use font
-    textFont('Jost-Thin');
+    textFont('Jost');
 
     // shadow(10);
     // drawingContext.shadowColor = color('hsla(0, 0%, 0%, 0.3)');
@@ -74,9 +75,17 @@ function circle01(radius) {
 
 function circleArc(radius, arcAngle) {
     push();
-    fill('hsl(15, 100%, 55%)');
     noStroke();
     arc(0, 0, radius, radius, 0, arcAngle);
+    pop();
+}
+
+function circleArcStroked(radius, arcAngle1, arcAngle2, strokeW) {
+    push();
+    noFill();
+    strokeWeight(strokeW);
+    stroke(almostBlack);
+    arc(0, 0, radius, radius, arcAngle1, arcAngle2);
     pop();
 }
 
@@ -84,14 +93,14 @@ function circleOpen(radius, strokeW) {
     push();
     noFill();
     strokeWeight(strokeW);
-    stroke('hsl(0, 0%, 0%)');
+    stroke(almostBlack);
     ellipse(0, 0, radius - strokeW / 1, radius - strokeW / 1);
     pop();
 }
 
 function wobble(amount, phase) {
-    //scale(sin((beat) * 8 + phase * TAU) * 0.5 + 1);
-    translate(p5.Vector.fromAngle(beat * 1 + phase * TAU, amount));
+    scale(sin((beat) * 8 + phase * TAU) * 0.5 + 1);
+    translate(p5.Vector.fromAngle(beat * 1 + random(1.0) * TAU, amount));
 }
 
 function scene01() {
@@ -107,11 +116,10 @@ function scene01() {
 
             translate(x, y);
             wobble(10, ((rows * col + row + 1) / (rows * columns)));
+            fill('hsl(15, 100%, 55%)');
             circleArc(120, TAU * (sin(beat * TAU / 4)/2 + 0.5));
             circleOpen(120, 20 * (sin(beat * TAU / 4)/2 + 0.5));
-
             pop();
-
         }
     }
 
@@ -133,50 +141,101 @@ function scene01() {
 }
 
 function scene02() {
+    push();
     let beatSubtract = 16;
-    fill('hsl(0, 5%, 5%)');
+    fill(almostBlack);
     noStroke();
-    textSize(100);
-    text('Form Follows Us', (beat - beatSubtract) * -700 + 1000, 400);
-   
+    textSize(50);
+    rotate(TAU / 4 * 3);
+    textAlign(left);
+    textFont('Jost-Bold');
+
+    if (beat < 18) {
+        text('Step aside, we are here', 0, left + 150);
+    } else if (beat < 20) {
+        text('Perfection? Pish!', 0, left + 150);
+    } else if (beat < 22) {
+        text('Form follows failure', 0, left + 150);
+    } else if (beat < 24) {
+        text('Yep, we are that pretentious', 0, left + 150);
+    } else if (beat < 26) {
+        text('Should have escaped the apostrophes', 0, left + 150);
+    } else if (beat < 32) {
+        text('Bonus points for Bold, right?', 0, left + 150);
+    } 
+    strokeWeight(2);
+    stroke(almostBlack);
+    line(bottom - 40, left + 90, zenith + 40, left + 90);
+    line(bottom - 40, left + 100, zenith + 40, left + 100);
+    strokeWeight(6);
+    line(bottom - 40, left + 210, zenith + 40, left + 210);
+    pop();
+
+    push();
+    noStroke();
+    fill('hsl(20, 80%, 55%)');
+    rect(400, 0, 1200, 1000)
+    pop();
+
+    textFont('Jost');
+    textSize(800);
+    // textAlign(left);
+    fill(almostWhite);
+    text(beat.toFixed(0), 300, 0);
+    let decimals = (beat * 1e10).toFixed().slice(-10);
+    textFont('Jost-Thin');
+    textSize(120);
+    fill(almostBlack);
+    text(decimals, 350, 400);
 }
 
 function scene03() {
     let beatSubtract = 32;
-    fill('hsl(0, 5%, 5%)');
+    const circleRadius = 700 
+    const circleOffset = 40 + sin(beat) * 15;
+    circleArc(circleRadius, TAU * (sin(beat * TAU / 16)/2 + 0.5))
+    circleArcStroked(circleRadius + circleOffset, TAU * (sin((beat))/2 + 0.5), TAU * (sin(beat * TAU / 16)/2 + 0.5), 1)
+    circleArcStroked(circleRadius + circleOffset, TAU * (sin((beat + 0.5))/2 + 0.5), TAU * (sin(beat * TAU / 64)/2 + 0.5), 1)
+    circleArcStroked(circleRadius + circleOffset * 2, TAU * (sin(beat * TAU / 64)/2 + 0.5), TAU * (cos(beat * TAU / 16)/2 + 0.5) - PI/2, 1)
+    circleArcStroked(circleRadius + circleOffset * 3, TAU * (sin((beat))/2 + 0.5) - PI/2, TAU * (sin(beat * TAU / 16)/2 + 0.5) - PI, 1)
+   
+    textFont('Jost-Thin');
+    textSize(50);
+    fill(almostBlack);
+    text(circleOffset, 500, -390);
+    text((1/circleOffset), -500, 390);
+    textFont('Jost');
+
+    text((beat.toFixed(0)), -0, 400);
+
+
+
+    fill(almostBlack);
     noStroke();
     textSize(100);
     text('Minimal? Monotonous!', (beat - beatSubtract) * -700 + 1000, 400);
-
-    
 }
 
 function scene04() {
     let beatSubtract = 48;
-    fill('hsl(0, 5%, 5%)');
+    fill(almostBlack);
     noStroke();
     textSize(100);
     text('Palette Power', (beat - beatSubtract) * -700 + 1000, 400);
-
-    
 }
 
 function scene05() {
     let beatSubtract = 64;
-    fill('hsl(0, 5%, 5%)');
+    fill(almostBlack);
     noStroke();
     textSize(100);
-    text('We are Overrated… Just Like This Design!', (beat - beatSubtract) * -700 + 1000, 400);
-
-     
+    text('Minimalism? We Minimized It to Zero', (beat - beatSubtract) * -700 + 1000, 400);
 }
 
 function scene06() {
     let beatSubtract = 80;
-    fill('hsl(0, 5%, 5%)');
+    fill(almostBlack);
     noStroke();
     textSize(100);
-    text('Yep, We’re That Pretentious', (beat - beatSubtract) * -700 + 1000, 400);
-
-   
+    text('If you are reading this, we are already too popular', (beat - beatSubtract) * -700 + 1000, 400);
 }
