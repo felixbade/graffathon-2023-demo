@@ -1,4 +1,3 @@
-
 const bassDrum = new Tone.MembraneSynth({
     pitchDecay: 0.15,
     octaves: 2,
@@ -44,7 +43,21 @@ const drumLoop = new Tone.Loop(time => {
     bassDrum.volume.rampTo(-0.5 * (beat * 9 % 16), 0.1, time);
     bassDrum.triggerAttackRelease("D1", "8n", time);
 }, "4n");
-drumLoop.start();
+
+const doorCloseSound = new Tone.Player(
+    './sounds/9876__heigh-hoo__car_door_closed.aiff'
+).toDestination();
+doorCloseSound.volume.value = -10;
+
+const doorLoop = new Tone.Loop(time => {
+    const beat = Math.floor(getBeat());
+    // Only play the close door sound every 4th bass drum hit
+    if (beat % 4 === 0) {
+        doorCloseSound.start(time);
+    }
+}, '4n');
+
+doorLoop.start();
 
 
 // set tempo
