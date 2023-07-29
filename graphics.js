@@ -40,7 +40,7 @@ function draw() {
         scene05();
     } else if (beat < 80) {
         scene06();
-    } 
+    }
 }
 
 function shadow(strength) {
@@ -99,14 +99,14 @@ function circleOpen(radius, strokeW) {
 }
 
 function wobble(amount, phase) {
-    scale(sin((beat) * 8 + phase * TAU) * 0.5 + 1);
-    translate(p5.Vector.fromAngle(beat * 1 + random(1.0) * TAU, amount));
+    scale(sin((beat) * 2 + phase * TAU) * 0.5 + 1);
+    translate(p5.Vector.fromAngle(beat * TAU / 4, amount));
 }
 
 function scene01() {
     const columns = 10;
     const rows = 6;
-    const margin = 120;    
+    const margin = 120;
 
     for (let col = 0; col < columns; col++) {
         for (let row = 0; row < rows; row++) {
@@ -117,27 +117,11 @@ function scene01() {
             translate(x, y);
             wobble(10, ((rows * col + row + 1) / (rows * columns)));
             fill('hsl(15, 100%, 55%)');
-            circleArc(120, TAU * (sin(beat * TAU / 4)/2 + 0.5));
-            circleOpen(120, 20 * (sin(beat * TAU / 4)/2 + 0.5));
+            circleArc(120, TAU * (sin(beat * TAU / 8)/2 + 0.5));
+            circleOpen(120, 20 * (sin(beat * TAU / 8)/2 + 0.5));
             pop();
         }
     }
-
-    push();
-    fill('hsl(240, 90%, 40%)');
-    rotateObject(0.5);
-    rect(0, 0, 50, 800);
-    pop();
-
-
-    // draw text
-    noShadow();
-
-    fill('hsl(0, 5%, 5%)');
-    noStroke();
-    textSize(100);
-    text('Hello, world!', beat * -700 + 1000, 400);
-
 }
 
 function scene02() {
@@ -162,7 +146,7 @@ function scene02() {
         text('Should have escaped the apostrophes', 0, left + 150);
     } else if (beat < 32) {
         text('Bonus points for Bold, right?', 0, left + 150);
-    } 
+    }
     strokeWeight(2);
     stroke(almostBlack);
     line(bottom - 40, left + 90, zenith + 40, left + 90);
@@ -191,14 +175,14 @@ function scene02() {
 
 function scene03() {
     let beatSubtract = 32;
-    const circleRadius = 700 
+    const circleRadius = 700
     const circleOffset = 40 + sin(beat) * 15;
     circleArc(circleRadius, TAU * (sin(beat * TAU / 16)/2 + 0.5))
     circleArcStroked(circleRadius + circleOffset, TAU * (sin((beat))/2 + 0.5), TAU * (sin(beat * TAU / 16)/2 + 0.5), 1)
     circleArcStroked(circleRadius + circleOffset, TAU * (sin((beat + 0.5))/2 + 0.5), TAU * (sin(beat * TAU / 64)/2 + 0.5), 1)
     circleArcStroked(circleRadius + circleOffset * 2, TAU * (sin(beat * TAU / 64)/2 + 0.5), TAU * (cos(beat * TAU / 16)/2 + 0.5) - PI/2, 1)
     circleArcStroked(circleRadius + circleOffset * 3, TAU * (sin((beat))/2 + 0.5) - PI/2, TAU * (sin(beat * TAU / 16)/2 + 0.5) - PI, 1)
-   
+
     textFont('Jost-Thin');
     textSize(50);
     fill(almostBlack);
