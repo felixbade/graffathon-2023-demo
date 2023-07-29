@@ -73,7 +73,6 @@ const doorCloseSound = new Tone.Player(
 );
 doorCloseSound.volume.value = -10;
 
-// player from 221626__moodpie__body_impact.wav
 const bodyImpactSound = new Tone.Player(
     './sounds/221626__moodpie__body_impact.wav'
 );
