@@ -99,31 +99,41 @@ bodyImpactLoop.start();
 
 
 
-// Create a MonoSynth (a monophonic synth) and connect it to the master output (speakers)
-const synth = new Tone.MonoSynth({
-  oscillator: {
-    type: "sawtooth"
-  },
-  envelope: {
-    attack: 0.1,
-    decay: 0.3,
-    release: 2,
-  }
-}).toDestination();
-synth.volume.value = -10;
+// Create an FMSynth (Frequency Modulation Synth) and connect it to the master output (speakers)
+const synth = new Tone.FMSynth({
+    harmonicity: 1,
+    modulationIndex: 10,
+    oscillator: {
+      type: 'sine',
+    },
+    envelope: {
+      attack: 0.01,
+      decay: 0.01,
+      sustain: 1,
+      release: 0.01,
+    },
+    modulation: {
+      type: 'sawtooth',
+    },
+    modulationEnvelope: {
+      attack: 0.5,
+      decay: 0,
+      sustain: 1,
+      release: 0.5,
+    },
+  }).toDestination();
 
-// The sequence of notes
-const bassline = ["C2", "C3", "A2", "C3"];
+  // Bassline - notes for a repetetive techno pattern with slight variation
+  const bassline = ['F1', 'F1', 'F1', 'F2'];
 
-// Create a loop
-const loop = new Tone.Loop(time => {
-  // Get the next note
-  let note = bassline.shift();
-  // Put the note at the end
-  bassline.push(note);
-  // Play the note
-  synth.triggerAttackRelease(note, "16n", time);
-}, "4n");
+  // Create a loop
+  const loop = new Tone.Sequence(
+    (time, note) => {
+      synth.triggerAttackRelease(note, '8n', time);
+    },
+    bassline,
+    '4n',
+  );
 loop.start();
 
 
