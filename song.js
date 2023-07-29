@@ -45,19 +45,35 @@ const drumLoop = new Tone.Loop(time => {
 }, "4n");
 
 const doorCloseSound = new Tone.Player(
-    './sounds/9876__heigh-hoo__car_door_closed.aiff'
+    './sounds/9876__heigh-hoo__car_door_closed.aiff',
 ).toDestination();
 doorCloseSound.volume.value = -10;
 
+// player from 221626__moodpie__body_impact.wav
+const bodyImpactSound = new Tone.Player(
+    './sounds/221626__moodpie__body_impact.wav'
+).toDestination();
+bodyImpactSound.volume.value = -10;
+
 const doorLoop = new Tone.Loop(time => {
+    const qBeat = Math.floor(getBeat() * 4);
+    let volume = -1 * (qBeat * 3 % 8) - 10;
+    if (volume > -16) {
+        doorCloseSound.start(time);
+        doorCloseSound.volume.rampTo(volume, 0.01, time);
+    }
+}, '8n');
+doorLoop.start();
+
+// 4n loop but delayed by 16n
+const bodyImpactLoop = new Tone.Loop(time => {
     const beat = Math.floor(getBeat());
     // Only play the close door sound every 4th bass drum hit
-    if (beat % 4 === 0) {
-        doorCloseSound.start(time);
+    if (beat % 4 === 3) {
+        bodyImpactSound.start(time);
     }
 }, '4n');
-
-doorLoop.start();
+bodyImpactLoop.start();
 
 
 // set tempo
