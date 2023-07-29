@@ -1,3 +1,25 @@
+
+
+const lowpass = new Tone.Filter({
+    frequency: 1000,
+    type: 'lowpass',
+    rolloff: -12,
+    Q: 5,
+    gain: 0
+}).toDestination();
+
+var lfo = new Tone.LFO({
+    frequency: Tone.Time('1n').toFrequency(),
+    type: 'sine',
+    min: 100,
+    max: 20000
+}).connect(lowpass.frequency);
+lfo.start();
+
+
+
+
+
 const bassDrum = new Tone.MembraneSynth({
     pitchDecay: 0.15,
     octaves: 2,
@@ -23,7 +45,7 @@ const hiHat = new Tone.NoiseSynth({
         sustain: 0
     },
     volume: -10
-}).toDestination();
+}).connect(lowpass);
 
 
 // define sequence in 16th notation
