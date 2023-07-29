@@ -5,7 +5,12 @@ function draw() {
     translate(width / 2, height / 2);
     scale(height / 1000);
 
-    background('hsl(330, 100%, 10%)');
+    background('hsl(60, 50%, 90%)');
+
+    drawingContext.shadowColor = color('hsla(0, 0%, 0%, 0.3)');
+    drawingContext.shadowBlur = 10;
+    drawingContext.shadowOffsetX = 0;
+    drawingContext.shadowOffsetY = 8;
 
     fill('hsl(15, 100%, 55%)');
     noStroke();
@@ -13,16 +18,25 @@ function draw() {
     ellipse(0, 0, radius, radius);
 
     push();
-    fill('hsl(190, 100%, 75%)');
+    fill('hsl(240, 100%, 75%)');
     rotate(beat * TAU / 4);
     rect(0, 0, 50, 800);
     pop();
 
+
     // use font
-    textFont('Jost');
+    textFont('Jost-Thin');
     // draw text
-    fill('hsl(0, 0%, 100%)');
+    noShadow();
+
+    fill('hsl(0, 5%, 5%)');
     noStroke();
     textSize(100);
-    text('Hello, world!', 0, 0);
+    text('Hello, world!', beat * -700 + 1000, 400);
+}
+
+function noShadow() {
+    drawingContext.shadowColor = color('hsla(0, 0%, 0%, 0.0)');
+    drawingContext.shadowBlur = 0;
+
 }
