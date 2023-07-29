@@ -53,7 +53,7 @@ const hihatLoop = new Tone.Loop(time => {
     const qBeat = Math.floor(getBeat() * 4);
     let volume = -1 * (qBeat * 11 % 16) - 10;
     if (volume < -16) volume = -100;
-    hiHat.volume.rampTo(volume, 0.01, time);
+    hiHat.volume.rampTo(volume - 6, 0.01, time);
     hiHat.triggerAttackRelease("8n", time);
 }, "16n");
 hihatLoop.start();
