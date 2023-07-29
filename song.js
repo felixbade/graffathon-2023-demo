@@ -148,13 +148,12 @@ Tone.Transport.bpm.value = 140;
 let previousPosition = 0;
 
 const play = () => {
-    // dunno why this is needed
-    // just figured it out with brief empirical testing
-    if (previousPosition === 0) {
-        Tone.Transport.start();
-    } else {
-        Tone.Transport.start(undefined, previousPosition);
+    // https://github.com/Tonejs/Tone.js/issues/341#issuecomment-386725880
+    if (Tone.context.state !== 'running') {
+        Tone.context.resume();
     }
+
+    Tone.Transport.start(undefined, previousPosition);
 };
 
 const pause = () => {
