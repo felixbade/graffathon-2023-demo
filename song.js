@@ -6,10 +6,10 @@ const lowpass = new Tone.Filter({
     rolloff: -12,
     Q: 5,
     gain: 0
-}).toDestination();
+});
 
 var lfo = new Tone.LFO({
-    frequency: Tone.Time('1n').toFrequency(),
+    frequency: Tone.Time('1m').toFrequency(),
     type: 'sine',
     min: 100,
     max: 20000
@@ -33,7 +33,7 @@ const bassDrum = new Tone.MembraneSynth({
         release: 1.4,
         attackCurve: "exponential"
     }
-}).toDestination();
+});
 
 const hiHat = new Tone.NoiseSynth({
     noise: {
@@ -65,16 +65,18 @@ const drumLoop = new Tone.Loop(time => {
     bassDrum.volume.rampTo(-0.5 * (beat * 9 % 16), 0.1, time);
     bassDrum.triggerAttackRelease("D1", "8n", time);
 }, "4n");
+drumLoop.start();
+
 
 const doorCloseSound = new Tone.Player(
     './sounds/9876__heigh-hoo__car_door_closed.aiff',
-).toDestination();
+);
 doorCloseSound.volume.value = -10;
 
 // player from 221626__moodpie__body_impact.wav
 const bodyImpactSound = new Tone.Player(
     './sounds/221626__moodpie__body_impact.wav'
-).toDestination();
+);
 bodyImpactSound.volume.value = -10;
 
 const doorLoop = new Tone.Loop(time => {
@@ -121,14 +123,17 @@ const synth = new Tone.FMSynth({
       sustain: 1,
       release: 0.5,
     },
-  }).toDestination();
+  });
 
   // Bassline - notes for a repetetive techno pattern with slight variation
   const bassline = [
     { note: 'F1', duration: '4n' },
-    { note: 'F1', duration: '8n' },
-    { note: 'F1', duration: '4n' },
-    { note: 'F2', duration: '8n' }];
+    { note: 'Ab1', duration: '8n' },
+    // { note: 'F1', duration: '4n' },
+    { note: 'F2', duration: '8n' },
+    { note: 'Eb1', duration: '8n' },
+];
+
 
   // Create a loop
   const loop = new Tone.Sequence(
@@ -139,3 +144,101 @@ const synth = new Tone.FMSynth({
     '4n',
   );
 loop.start();
+
+
+const melodySynth = new Tone.PolySynth();
+const melody = [
+    { note: 'Ab4', duration: '4n' },
+    { note: 'F4', duration: '8n' },
+    { note: 'Eb4', duration: '4n' },
+    { note: 'Db4', duration: '8n' },
+];
+
+const melodyLoop = new Tone.Sequence(
+    (time, note) => {
+      melodySynth.triggerAttackRelease(note.note, note.duration, time);
+    },
+    melody,
+    '4n',
+);
+melodyLoop.start();
+
+
+const reverb = new Tone.Reverb({ decay: 3, wet: 0.5 });
+const delay = new Tone.PingPongDelay("16n", 0.2).connect(reverb);
+
+// Use delay and reverb as output
+bassDrum.connect(delay);
+hiHat.connect(delay);
+synth.connect(delay);
+melodySynth.connect(delay);
+
+
+// Tone.Transport.scheduleRepeat((time) => {
+//     lfo.frequency.rampTo('8n', '4n', time);
+// }, '2m');
+
+// Tone.Transport.scheduleRepeat((time) => {
+//     lfo.frequency.rampTo('1m', '4n', time);
+// }, '4m');
+
+
+
+// create gain nodes for instruments
+const bassDrumGain = new Tone.Gain().toDestination();
+const hiHatGain = new Tone.Gain().toDestination();
+const synthGain = new Tone.Gain().toDestination();
+const melodySynthGain = new Tone.Gain().toDestination();
+const doorCloseGain = new Tone.Gain().toDestination();
+const bodyImpactGain = new Tone.Gain().toDestination();
+const reverbGain = new Tone.Gain().toDestination();
+
+// connect everything to their corresponding gain node
+bassDrum.connect(bassDrumGain);
+hiHat.connect(hiHatGain);
+synth.connect(synthGain);
+melodySynth.connect(melodySynthGain);
+doorCloseSound.connect(doorCloseGain);
+bodyImpactSound.connect(bodyImpactGain);
+reverb.connect(reverbGain);
+
+// mute everything in the beginning
+bassDrumGain.gain.rampTo(0, 0.01);
+hiHatGain.gain.rampTo(0, 0.01);
+synthGain.gain.rampTo(0, 0.01);
+melodySynthGain.gain.rampTo(0, 0.01);
+doorCloseGain.gain.rampTo(0, 0.01);
+bodyImpactGain.gain.rampTo(0, 0.01);
+reverbGain.gain.rampTo(0, 0.01);
+
+
+
+// Create an array representing our song structure in 8-bar sections
+// I-V-B-D stands for Intro-Verse-Build-Drop
+const songStructure = 'I I V V V V B B D D V V V V B B D D O O'.split(' ');
+
+// Schedule change every 4 bars
+Tone.Transport.scheduleRepeat((time) => {
+    const section = Math.floor(getBeat() / 16);
+    console.log(section)
+
+    if (section === 0) {
+        // For the intro, we might just have bassDrum and hiHat
+        bassDrumGain.gain.rampTo(1, 0.01);
+        doorCloseGain.gain.rampTo(0, 0.01);
+        bodyImpactGain.gain.rampTo(1, 0.01);
+        hiHatGain.gain.rampTo(1, 0.01);
+        synthGain.gain.rampTo(0, 0.01);
+        melodySynthGain.gain.rampTo(0, 0.01);
+        reverbGain.gain.rampTo(0, 0.01);
+    } else if (section === 1) {
+        // For the verse, we might add the synth and melodySynth
+        bassDrumGain.gain.rampTo(1, 0.01);
+        doorCloseGain.gain.rampTo(0, 0.01);
+        bodyImpactGain.gain.rampTo(1, 0.01);
+        hiHatGain.gain.rampTo(1, 0.01);
+        synthGain.gain.rampTo(1, 0.01);
+        melodySynthGain.gain.rampTo(0, 0.01);
+        reverbGain.gain.rampTo(0, 0.01);
+    }
+}, '4m');
