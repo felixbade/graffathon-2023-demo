@@ -80,7 +80,7 @@ bodyImpactSound.volume.value = -10;
 
 const doorLoop = new Tone.Loop(time => {
     const qBeat = Math.floor(getBeat() * 4);
-    let volume = -1 * (qBeat * 3 % 8) - 10;
+    let volume = -1 * (qBeat * 5 % 16) - 10;
     if (volume > -16) {
         doorCloseSound.start(time);
         doorCloseSound.volume.rampTo(volume, 0.01, time);
