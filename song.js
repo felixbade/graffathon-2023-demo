@@ -124,12 +124,16 @@ const synth = new Tone.FMSynth({
   }).toDestination();
 
   // Bassline - notes for a repetetive techno pattern with slight variation
-  const bassline = ['F1', 'F1', 'F1', 'F2'];
+  const bassline = [
+    { note: 'F1', duration: '4n' },
+    { note: 'F1', duration: '8n' },
+    { note: 'F1', duration: '4n' },
+    { note: 'F2', duration: '8n' }];
 
   // Create a loop
   const loop = new Tone.Sequence(
     (time, note) => {
-      synth.triggerAttackRelease(note, '8n', time);
+      synth.triggerAttackRelease(note.note, note.duration, time);
     },
     bassline,
     '4n',
