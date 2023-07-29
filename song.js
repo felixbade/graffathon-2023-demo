@@ -76,6 +76,36 @@ const bodyImpactLoop = new Tone.Loop(time => {
 bodyImpactLoop.start();
 
 
+
+// Create a MonoSynth (a monophonic synth) and connect it to the master output (speakers)
+const synth = new Tone.MonoSynth({
+  oscillator: {
+    type: "sawtooth"
+  },
+  envelope: {
+    attack: 0.1,
+    decay: 0.3,
+    release: 2,
+  }
+}).toDestination();
+synth.volume.value = -10;
+
+// The sequence of notes
+const bassline = ["C2", "C3", "A2", "C3"];
+
+// Create a loop
+const loop = new Tone.Loop(time => {
+  // Get the next note
+  let note = bassline.shift();
+  // Put the note at the end
+  bassline.push(note);
+  // Play the note
+  synth.triggerAttackRelease(note, "16n", time);
+}, "4n");
+loop.start();
+
+
+
 // set tempo
 Tone.Transport.bpm.value = 140;
 
