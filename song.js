@@ -148,7 +148,13 @@ Tone.Transport.bpm.value = 140;
 let previousPosition = 0;
 
 const play = () => {
-    Tone.Transport.start(undefined, previousPosition);
+    // dunno why this is needed
+    // just figured it out with brief empirical testing
+    if (previousPosition === 0) {
+        Tone.Transport.start();
+    } else {
+        Tone.Transport.start(undefined, previousPosition);
+    }
 };
 
 const pause = () => {
@@ -157,6 +163,7 @@ const pause = () => {
 };
 
 document.addEventListener('keydown', (event) => {
+    if (event.repeat) return;
     if (event.code === 'Space') {
         if (Tone.Transport.state === 'started') {
             pause();
