@@ -36,3 +36,11 @@ document.addEventListener('keydown', function (event) {
         fullscreen(!fullscreen());
     }
 })
+
+function endDemo() {
+    fullscreen(false);
+    // stop audio
+    Tone.Transport.stop();
+    // set time to 0
+    Tone.Transport.seconds = 0;
+}
