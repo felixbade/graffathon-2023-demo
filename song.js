@@ -68,35 +68,45 @@ const drumLoop = new Tone.Loop(time => {
 drumLoop.start();
 
 
-const doorCloseSound = new Tone.Player(
-    './sounds/9876__heigh-hoo__car_door_closed.aiff',
-);
-doorCloseSound.volume.value = -10;
+// let doorCloseSound;
+// const doorCloseSoundBuffer = new Tone.Buffer("./sounds/9876__heigh-hoo__car_door_closed.aiff");
+// const doorCloseSound = new Tone.Player(doorCloseSoundBuffer);
+// doorCloseSound.volume.value = -10;
 
-const bodyImpactSound = new Tone.Player(
-    './sounds/221626__moodpie__body_impact.wav'
-);
-bodyImpactSound.volume.value = -10;
+// doorCloseSoundBuffer.onload = () => {
+//     const doorCloseSound = new Tone.Player(doorCloseSoundBuffer).toDestination();
+//     doorCloseSound.volume.value = -10;
 
-const doorLoop = new Tone.Loop(time => {
-    const qBeat = Math.floor(getBeat() * 4);
-    let volume = -1 * (qBeat * 5 % 16) - 10;
-    if (volume > -16) {
-        doorCloseSound.start(time);
-        doorCloseSound.volume.rampTo(volume, 0.01, time);
-    }
-}, '8n');
-doorLoop.start();
+//     // Start your Player only after the Buffer is loaded:
+//     Tone.context.resume().then(() => {
+//         doorCloseSound.start();
+//     });
+// };
+
+// const bodyImpactSound = new Tone.Player(
+//     './sounds/221626__moodpie__body_impact.wav'
+// );
+// bodyImpactSound.volume.value = -10;
+
+// const doorLoop = new Tone.Loop(time => {
+//     const qBeat = Math.floor(getBeat() * 4);
+//     let volume = -1 * (qBeat * 5 % 16) - 10;
+//     if (volume > -16) {
+//         doorCloseSound.start(time);
+//         doorCloseSound.volume.rampTo(volume, 0.01, time);
+//     }
+// }, '8n');
+// doorLoop.start();
 
 // 4n loop but delayed by 16n
-const bodyImpactLoop = new Tone.Loop(time => {
-    const beat = Math.floor(getBeat());
-    // Only play the close door sound every 4th bass drum hit
-    if (beat % 4 === 3) {
-        bodyImpactSound.start(time);
-    }
-}, '4n');
-bodyImpactLoop.start();
+// const bodyImpactLoop = new Tone.Loop(time => {
+//     const beat = Math.floor(getBeat());
+//     // Only play the close door sound every 4th bass drum hit
+//     if (beat % 4 === 3) {
+//         bodyImpactSound.start(time);
+//     }
+// }, '4n');
+// bodyImpactLoop.start();
 
 
 
@@ -208,8 +218,8 @@ bassDrum.connect(bassDrumGain);
 hiHat.connect(hiHatGain);
 synth.connect(synthGain);
 melodySynth.connect(melodySynthGain);
-doorCloseSound.connect(doorCloseGain);
-bodyImpactSound.connect(bodyImpactGain);
+// doorCloseSound.connect(doorCloseGain);
+// bodyImpactSound.connect(bodyImpactGain);
 reverb.connect(reverbGain);
 
 // mute everything in the beginning

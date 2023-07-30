@@ -6,6 +6,10 @@ const play = () => {
         Tone.context.resume();
     }
 
+    // console.log('start');
+    // Tone.Transport.start();
+    // Tone.start();
+
     Tone.Transport.start(undefined, previousPosition);
 };
 
