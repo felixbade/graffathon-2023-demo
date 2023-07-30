@@ -21,6 +21,7 @@ function draw() {
     scale(scaling);
     backgroundColor = almostWhite
     background(backgroundColor);
+    textAlign(CENTER);
 
     // use font
     textFont('Jost');
