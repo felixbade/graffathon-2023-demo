@@ -46,12 +46,13 @@ function draw() {
     } else if (beat < 96) {
         scene01(trueBlue);
     } else if (beat < 112) {
-        endDemo();
         scene04();
     } else if (beat < 128) {
         scene05();
     } else if (beat < 144) {
         scene06();
+    } else {
+        endDemo();
     }
 }
 
