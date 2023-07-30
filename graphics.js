@@ -28,7 +28,9 @@ function draw() {
     // shadow(10);
     // drawingContext.shadowColor = color('hsla(0, 0%, 0%, 0.3)');
 
-    if (beat < 16) {
+    if (beat === 0) {
+        infoScene();
+    } else if (beat < 16) {
         scene01('hsl(15, 100%, 55%)');
     } else if (beat < 32) {
         scene02();
@@ -47,6 +49,25 @@ function draw() {
     } else if (beat < 144) {
         scene06();
     }
+}
+
+function infoScene() {
+    push();
+    textAlign(LEFT);
+    textSize(100);
+    textFont('Jost-Bold');
+    text('Press F to go fullscreen', -400, -80);
+    text('Press SPACE to start', -400, 80);
+    noStroke();
+    fill(almostBlack);
+    rect(-460, 0, 3, 400);
+    rect(-480, 0, 3, 400);
+
+    // x1, y1, x2, y2
+    // rectMode(CORNERS);
+    // rect(-460, -150, -463, 550);
+    // rect(-480, -150, -483, 550);
+    // rectMode(CENTER);
 }
 
 function shadow(strength) {

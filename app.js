@@ -28,3 +28,11 @@ function windowResized() {
     resizeCanvas(width, height);
     redraw();
 }
+
+// press F to go full screen, native eventlistener
+document.addEventListener('keydown', function (event) {
+    if (event.key === 'f') {
+        console.log('f')
+        fullscreen(!fullscreen());
+    }
+})
