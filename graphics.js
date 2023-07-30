@@ -29,16 +29,22 @@ function draw() {
     // drawingContext.shadowColor = color('hsla(0, 0%, 0%, 0.3)');
 
     if (beat < 16) {
-        scene01();
+        scene01('hsl(15, 100%, 55%)');
     } else if (beat < 32) {
         scene02();
     } else if (beat < 48) {
         scene03();
-    } else if (beat < 48) {
-        scene04();
     } else if (beat < 64) {
-        scene05();
+        scene02();
     } else if (beat < 80) {
+        scene03();
+    } else if (beat < 96) {
+        scene01('hsl(200, 90%, 45%)');
+    } else if (beat < 112) {
+        scene04();
+    } else if (beat < 128) {
+        scene05();
+    } else if (beat < 144) {
         scene06();
     }
 }
@@ -103,7 +109,7 @@ function wobble(amount, phase) {
     translate(p5.Vector.fromAngle(beat * TAU / 4, amount));
 }
 
-function scene01() {
+function scene01(fillColor) {
     const columns = 10;
     const rows = 6;
     const margin = 120;
@@ -116,7 +122,7 @@ function scene01() {
 
             translate(x, y);
             wobble(10, ((rows * col + row + 1) / (rows * columns)));
-            fill('hsl(15, 100%, 55%)');
+            fill(fillColor);
             circleArc(120, TAU * (sin(beat * TAU / 8)/2 + 0.5));
             circleOpen(120, 20 * (sin(beat * TAU / 8)/2 + 0.5));
             pop();
