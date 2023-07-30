@@ -44,6 +44,7 @@ function draw() {
     } else if (beat < 96) {
         scene01('hsl(200, 90%, 45%)');
     } else if (beat < 112) {
+        endDemo();
         scene04();
     } else if (beat < 128) {
         scene05();
