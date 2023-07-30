@@ -1,4 +1,6 @@
-# Graffathon 2023 Demo
+# Timeful by Two Bad
+
+A Graffathon 2023 demo
 
 ## How to run
 - Open index.html in a browser
