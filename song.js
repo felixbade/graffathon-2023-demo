@@ -53,7 +53,7 @@ const hihatLoop = new Tone.Loop(time => {
     const qBeat = Math.floor(getBeat() * 4);
     let volume = -1 * (qBeat * 11 % 16) - 10;
     if (volume < -16) volume = -100;
-    hiHat.volume.rampTo(volume - 6, 0.01, time);
+    hiHat.volume.rampTo(volume - 7, 0.01, time);
     hiHat.triggerAttackRelease("8n", time);
 }, "16n");
 hihatLoop.start();
@@ -125,7 +125,7 @@ const synth = new Tone.FMSynth({
   });
 
   // Bassline - notes for a repetetive techno pattern with slight variation
-  const bassline = [
+  const basslineA = [
     { note: 'F1', duration: '4n' },
     { note: 'Ab1', duration: '8n' },
     // { note: 'F1', duration: '4n' },
@@ -134,15 +134,26 @@ const synth = new Tone.FMSynth({
 ];
 
 
+
+
+// Bassline for Section B - notes for a new repetetive techno pattern with some rhythmic and harmonic modifications for change in intensity
+const basslineB = [
+    { note: 'G1', duration: '4n' },
+    { note: 'Bb1', duration: '8n' },
+    { note: 'G2', duration: '8n' },
+    { note: 'F1', duration: '16n' },
+    // { note: 'Db2', duration: '8n' },
+];
+
   // Create a loop
-  const loop = new Tone.Sequence(
+  let bassLoop = new Tone.Sequence(
     (time, note) => {
       synth.triggerAttackRelease(note.note, note.duration, time);
     },
-    bassline,
+    basslineA,
     '4n',
   );
-loop.start();
+  bassLoop.start();
 
 
 const melodySynth = new Tone.PolySynth();
@@ -218,7 +229,6 @@ Tone.Transport.scheduleRepeat((time) => {
     console.log(section)
 
     if (section === 0) {
-        // For the intro, we might just have bassDrum and hiHat
         bassDrumGain.gain.rampTo(1, 0.01);
         doorCloseGain.gain.rampTo(0, 0.01);
         bodyImpactGain.gain.rampTo(1, 0.01);
@@ -226,8 +236,8 @@ Tone.Transport.scheduleRepeat((time) => {
         synthGain.gain.rampTo(0, 0.01);
         melodySynthGain.gain.rampTo(0, 0.01);
         reverbGain.gain.rampTo(0, 0.01);
+
     } else if (section === 1) {
-        // For the verse, we might add the synth and melodySynth
         bassDrumGain.gain.rampTo(1, 0.01);
         doorCloseGain.gain.rampTo(0, 0.01);
         bodyImpactGain.gain.rampTo(1, 0.01);
@@ -235,5 +245,40 @@ Tone.Transport.scheduleRepeat((time) => {
         synthGain.gain.rampTo(1, 0.01);
         melodySynthGain.gain.rampTo(0, 0.01);
         reverbGain.gain.rampTo(0, 0.01);
+
+    } else if (section === 2) {
+        bassDrumGain.gain.rampTo(0, 0.01);
+        doorCloseGain.gain.rampTo(1, 0.01);
+        bodyImpactGain.gain.rampTo(1, 0.01);
+        hiHatGain.gain.rampTo(1, 0.01);
+        synthGain.gain.rampTo(1, 0.01);
+        melodySynthGain.gain.rampTo(0, 0.01);
+        // reverbGain.gain.rampTo(0.15, 0.01);
+    } else if (section === 3) {
+
+    }
+
+
+    // alternate bass lines
+    if (section % 2 === 1) {
+        bassLoop.stop();
+        bassLoop = new Tone.Sequence(
+            (time, note) => {
+            synth.triggerAttackRelease(note.note, note.duration, time);
+            },
+            basslineA,
+            '4n',
+        );
+        bassLoop.start();
+    } else {
+        bassLoop.stop();
+        bassLoop = new Tone.Sequence(
+            (time, note) => {
+            synth.triggerAttackRelease(note.note, note.duration, time);
+            },
+            basslineB,
+            '4n',
+        );
+        bassLoop.start();
     }
 }, '4m');
