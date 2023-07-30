@@ -2,6 +2,8 @@ let beat;
 let backgroundColor;
 const almostBlack = 'hsl(240, 5%, 5%)';
 const almostWhite = 'hsl(60, 30%, 80%)';
+const reddishOrange = 'hsl(20, 80%, 55%)';
+const trueBlue = 'hsl(200, 80%, 45%)';
 let scaling;
 let left
 let right
@@ -10,7 +12,7 @@ const zenith = -500;
 const bottom = 500;
 
 function draw() {
-    beat = getBeat() + 0;
+    beat = getBeat() + 16;
 
     scaling = height / 1000;
     left = (-width / 2) / scaling;
@@ -29,7 +31,7 @@ function draw() {
     // drawingContext.shadowColor = color('hsla(0, 0%, 0%, 0.3)');
 
     if (beat < 16) {
-        scene01('hsl(15, 100%, 55%)');
+        scene01(reddishOrange);
     } else if (beat < 32) {
         scene02();
     } else if (beat < 48) {
@@ -39,7 +41,7 @@ function draw() {
     } else if (beat < 80) {
         scene03();
     } else if (beat < 96) {
-        scene01('hsl(200, 90%, 45%)');
+        scene01(trueBlue);
     } else if (beat < 112) {
         scene04();
     } else if (beat < 128) {
@@ -70,12 +72,9 @@ function scaleObject() {
 
 function circle01(radius) {
     push();
-    fill('hsl(15, 100%, 55%)');
+    fill(reddishOrange);
     noStroke();
     ellipse(0, 0, radius, radius);
-    blendMode(BLEND);
-    fill(backgroundColor);
-    rect(radius/2, radius/2, radius / 1, radius / 1);
     pop();
 }
 
@@ -105,8 +104,22 @@ function circleOpen(radius, strokeW) {
 }
 
 function wobble(amount, phase) {
-    scale(sin((beat) * 2 + phase * TAU) * 0.5 + 1);
+    scale(pow(sin((beat) * 8 + phase * TAU) * 0.5 + 1), 1);
     translate(p5.Vector.fromAngle(beat * TAU / 4, amount));
+}
+
+function randomTranslation(amount) {
+    translate((random(amount)) - amount / 2, (random(amount)) - amount / 2);
+}
+
+function randomRotation(amount) {
+    rotate(random(amount));
+}
+
+function unstableOrange(amount) {
+    const redHue = round(20 + random(amount) - amount / 2);
+    fill(`hsl(${redHue}, 80%, 55%)`);
+    // fill('hsl(30, 80%, 55%)');
 }
 
 function scene01(fillColor) {
@@ -119,12 +132,19 @@ function scene01(fillColor) {
             const x = map(col, 0, columns - 1, left + margin, right - margin);
             const y = map(row, 0, rows - 1, zenith + margin, bottom - margin);
             push();
-
+            const cellNumber = rows * col + row + 1;
             translate(x, y);
-            wobble(10, ((rows * col + row + 1) / (rows * columns)));
+            
+            textSize(20);
+            fill(almostBlack);
+            push();
+            randomTranslation(5);
+            text((beat + cellNumber).toFixed(1), 80, 80);
+            pop();
+            wobble(10, (cellNumber / (rows * columns)));
             fill(fillColor);
             circleArc(120, TAU * (sin(beat * TAU / 8)/2 + 0.5));
-            circleOpen(120, 20 * (sin(beat * TAU / 8)/2 + 0.5));
+            circleOpen(120 + random(beat / 1), 20 * (sin(beat * TAU / 8)/1 + 0.0));
             pop();
         }
     }
@@ -149,9 +169,12 @@ function scene02() {
     } else if (beat < 24) {
         text('Yep, we are that pretentious', 0, left + 150);
     } else if (beat < 26) {
-        text('Should have escaped the apostrophes', 0, left + 150);
+        text('Should have escaped the \'apostrophes\'', 0, left + 150);
     } else if (beat < 32) {
         text('Bonus points for Bold, right?', 0, left + 150);
+    } else if (beat > 32) {
+        textSize(40);
+        text('Your message here? Please contact our sales team.', 0, left + 150);
     }
     strokeWeight(2);
     stroke(almostBlack);
@@ -163,7 +186,8 @@ function scene02() {
 
     push();
     noStroke();
-    fill('hsl(20, 80%, 55%)');
+    // fill(reddishOrange);
+    unstableOrange(beat / 1 - beatSubtract);
     rect(400, 0, 1200, 1000)
     pop();
 
@@ -171,7 +195,11 @@ function scene02() {
     textSize(800);
     // textAlign(left);
     fill(almostWhite);
+    push();
+    randomTranslation(random(beat - 16));
+    // randomRotation(random(beat / 500));
     text(beat.toFixed(0), 300, 0);
+    pop();
     let decimals = (beat * 1e10).toFixed().slice(-10);
     textFont('Jost-Thin');
     textSize(120);
@@ -181,13 +209,28 @@ function scene02() {
 
 function scene03() {
     let beatSubtract = 32;
+
+    if ((beat * 8) % 16 <= 1) {
+        fill('white');
+    } else {
+        fill(almostBlack);
+
+    }
     const circleRadius = 700
     const circleOffset = 40 + sin(beat) * 15;
+    push();
+    randomTranslation(random(beat));
     circleArc(circleRadius, TAU * (sin(beat * TAU / 16)/2 + 0.5))
+    randomTranslation(random(beat));
+
     circleArcStroked(circleRadius + circleOffset, TAU * (sin((beat))/2 + 0.5), TAU * (sin(beat * TAU / 16)/2 + 0.5), 1)
+    randomTranslation(random(beat));
     circleArcStroked(circleRadius + circleOffset, TAU * (sin((beat + 0.5))/2 + 0.5), TAU * (sin(beat * TAU / 64)/2 + 0.5), 1)
+    randomTranslation(random(beat));
     circleArcStroked(circleRadius + circleOffset * 2, TAU * (sin(beat * TAU / 64)/2 + 0.5), TAU * (cos(beat * TAU / 16)/2 + 0.5) - PI/2, 1)
+    randomTranslation(random(beat));
     circleArcStroked(circleRadius + circleOffset * 3, TAU * (sin((beat))/2 + 0.5) - PI/2, TAU * (sin(beat * TAU / 16)/2 + 0.5) - PI, 1)
+    pop();
 
     textFont('Jost-Thin');
     textSize(50);
@@ -203,7 +246,7 @@ function scene03() {
     fill(almostBlack);
     noStroke();
     textSize(100);
-    text('Minimal? Monotonous!', (beat - beatSubtract) * -700 + 1000, 400);
+    text('Minimal. Monotonous.', (beat - beatSubtract) * -700 + 1000, 400);
 }
 
 function scene04() {
