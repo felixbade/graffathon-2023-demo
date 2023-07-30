@@ -2,6 +2,7 @@
 
 ## How to run
 - Open index.html in a browser
-- Press the full screen button (once we have implemented it)
-- Wait for the full screen notification to disappear
-- Press space to start the demo
+- There are instructions on screen
+    - F for full screen
+    - Space to start (if possible please wait for the full screen notification to disappear)
+- When the demo is over, it will exit full screen and display instructions again
