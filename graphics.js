@@ -167,10 +167,16 @@ function scene01(fillColor) {
             pop();
             wobble(10, (cellNumber / (rows * columns)));
             fill(fillColor);
-            circleArc(120, TAU * (sin(beat * TAU / 8)/2 + 0.5));
+            circleArc(120, TAU * (sin(beat * TAU / 8)/2 + 0.5) * (cellNumber / (rows * columns)));
             circleOpen(120 + random(beat / 1), 20 * (sin(beat * TAU / 8)/1 + 0.0));
             pop();
         }
+    }
+    if (beat >= 80) {
+        textFont('Jost');
+        textSize(120);
+        text('If you are reading this, we are already too popular', (beat - 80) * -300 + 1200, 400);
+
     }
 }
 
@@ -265,8 +271,6 @@ function scene03() {
 
     text((beat.toFixed(0)), -0, 400);
 
-
-
     fill(almostBlack);
     noStroke();
     textSize(100);
@@ -274,11 +278,11 @@ function scene03() {
 }
 
 function scene04() {
-    let beatSubtract = 48;
+    let beatSubtract = 112;
     fill(almostBlack);
     noStroke();
     textSize(100);
-    text('Palette Power', (beat - beatSubtract) * -700 + 1000, 400);
+    text('If you are reading this, we are already too popular', (beat - 80) * -700 + 1000, 400);
 }
 
 function scene05() {
@@ -286,7 +290,7 @@ function scene05() {
     fill(almostBlack);
     noStroke();
     textSize(100);
-    text('Minimalism? We Minimized It to Zero', (beat - beatSubtract) * -700 + 1000, 400);
+    text(' ', (beat - beatSubtract) * -700 + 1000, 400);
 }
 
 function scene06() {
@@ -294,5 +298,5 @@ function scene06() {
     fill(almostBlack);
     noStroke();
     textSize(100);
-    text('If you are reading this, we are already too popular', (beat - beatSubtract) * -700 + 1000, 400);
+    text(' ', (beat - beatSubtract) * -700 + 1000, 400);
 }
