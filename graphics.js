@@ -12,7 +12,7 @@ const zenith = -500;
 const bottom = 500;
 
 function draw() {
-    beat = getBeat() + 16;
+    beat = getBeat() + 0;
 
     scaling = height / 1000;
     left = (-width / 2) / scaling;
