@@ -212,10 +212,6 @@ reverbGain.gain.rampTo(0, 0.01);
 
 
 
-// Create an array representing our song structure in 8-bar sections
-// I-V-B-D stands for Intro-Verse-Build-Drop
-const songStructure = 'I I V V V V B B D D V V V V B B D D O O'.split(' ');
-
 // Schedule change every 4 bars
 Tone.Transport.scheduleRepeat((time) => {
     const section = Math.floor(getBeat() / 16);
